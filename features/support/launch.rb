@@ -22,7 +22,9 @@ class OSRMLauncher
   def self.load_data
     self.osrm_up?
     puts '=== loading data'
+    puts "Time before running osrm-datastore: #{Time.now.to_f}"
     `#{BIN_PATH}/osrm-datastore #{@input_file}`
+    puts "Time after running osrm-datastore:  #{Time.now.to_f}"
   end
 
   def self.launch
@@ -57,8 +59,10 @@ class OSRMLauncher
 
   def self.osrm_up
     return if self.osrm_up?
-    print '=== launching osrm... '
+    puts '=== launching osrm... '
+    puts "Time before starting osrm-routed:      #{Time.now.to_f}"
     @@pid = Process.spawn("#{BIN_PATH}/osrm-routed --sharedmemory=1 --port #{OSRM_PORT}",:out=>OSRM_ROUTED_LOG_FILE, :err=>OSRM_ROUTED_LOG_FILE)
+    puts "Time after starting osrm-routed in bg: #{Time.now.to_f}"
     puts "pid=#{@@pid}"
   end
 
